@@ -1,0 +1,64 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" href="icon.png">
+      
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link href="open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/main.css">
+
+        <style>
+                .lvl-over {
+                    box-shadow: inset 0px 0px 16px 0px rgba(50, 50, 50, 1);
+                }
+            
+                .lvl-target {
+                  background-color: #ddd; 
+                  opacity: .5;
+                }
+            
+                [draggable] {
+                  cursor: move;
+                }
+              </style>
+    </head>
+    <body ng-app="lyceum" ng-cloak>
+        <% include ../partials/nav.ejs %>
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Новый логин и пароль</h2>
+                        <form  method='post' action="/auth/new">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Новый логин</label>
+                              <input name="login" type="text" class="form-control" id="exampleInputEmail1" placeholder="Login">
+                            </div>
+                            <div class="form-group">
+                              <label for="exampleInputPassword1">Новый пароль</label>
+                              <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                          </form>
+                      </div>
+                </div>
+            
+            </div>
+        </div>
+
+        
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+        <script src="js/bootstrap.min.js"></script>
+       
+    </body>
+</html>

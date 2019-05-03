@@ -1,0 +1,12 @@
+{
+    "name": "exams.lyceum",
+    "version": "1.0.0",
+    "description": "exams.lyceum.by",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "dependencies": {
+      "express": "^4.16.1"
+    }
+  }

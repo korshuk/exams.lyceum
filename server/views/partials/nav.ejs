@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item <%= page==='index' ? 'active' : '' %>">
+          <a class="nav-link" href="/admin">Главная <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item <%= page==='lists' ? 'active' : '' %>">
+            <a class="nav-link" href="/admin/lists.html">Списки</a>
+          </li>
+        <li class="nav-item <%= page==='cleandata' ? 'active' : '' %>">
+          <a class="nav-link" href="/admin/cleandata.html">Загрузка начальных данных</a>
+        </li>
+        <li class="nav-item <%= page==='settings' ? 'active' : '' %>">
+            <a class="nav-link" href="/admin/settings.html">Настройки</a>
+          </li>
+      </ul>
+    </div>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item">
+          <a class="nav-item nav-link mr-md-2" href="/auth/logout">
+            Выход
+          </a>
+          </li>
+      </ul>
+  </nav>

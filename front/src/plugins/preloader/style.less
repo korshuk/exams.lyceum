@@ -1,0 +1,169 @@
+@imageWidth: 150px;
+@imageHeight: 150px;
+@progressHeight: 4px;
+
+@containerWidth: @imageHeight;
+@containerHeight: @imageHeight;
+
+@animationStep: 1s;
+@animationDuration: 3s;
+
+@greyColor: #e6e6e6;
+@redColor: #df3b49;
+
+.initial-preloader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    background: #fff;
+    opacity: 1;
+    visibility: visible;
+    transition:  opacity @animationStep, visibility @animationStep;
+}
+
+.logo-container {
+    opacity: 0;
+    animation-duration: 2 * @animationStep;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+    animation-name: logoAppear; 
+}
+
+.logo-img-container {
+    position: relative;
+    width: 100%;
+    height: @containerHeight;
+    
+    animation-timing-function: cubic-bezier(.36,.07,.19,.97);
+    animation-fill-mode: both;
+    animation-delay: @animationDuration + @animationStep;
+    animation-duration: @animationStep;
+    animation-name: logoImgLoadingEnd; 
+
+    &:before {
+        position: absolute;
+        content: '';
+        background: @greyColor;
+        width: @containerWidth * 10;
+        height: @containerWidth * 10;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+        transition: width @animationDuration @animationStep, height @animationDuration @animationStep, opacity @animationDuration @animationStep;
+    }
+}
+.logo-img {
+    display: block;
+    width: @imageWidth;
+    height: @imageHeight;
+    margin: 0 auto;
+    position: relative;
+
+    &-complete {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -@imageWidth / 2;
+        margin-top: -@imageHeight / 2;
+    
+        clip-path: circle(0 at center);
+        transition: clip-path (@animationDuration + 2 * @animationStep) 2 * @animationStep;
+    }
+}
+
+.loading-progress {
+    width: @containerWidth;
+    height: @progressHeight;
+    background: @greyColor;
+    position: relative;
+    margin-top: 30px;
+    border-radius: @progressHeight / 2;
+    overflow: hidden;
+    
+    &:after {
+        content: '';
+        position: absolute;
+        left: -30%;
+        top: 0;
+        width: 30%;
+        height: @progressHeight;
+        background: @redColor;
+        border-radius: @progressHeight / 2;
+
+        animation-duration: @animationStep;
+       
+        animation-iteration-count: infinite;
+    }
+}
+
+
+
+
+.loading-start {
+    
+    .logo-img-complete {
+        clip-path: circle(@containerWidth at center);
+    }
+    
+    .logo-img-container{
+        &:before {
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+    }
+
+    .loading-progress {
+        &:after {
+            animation-name: progressLoading; 
+        }
+    }
+}
+
+@keyframes logoImgLoadingEnd {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    
+    20% {
+        transform: translate3d(0, -2px, 0);
+    }
+
+    40%, 80% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    60% {
+        transform: translate3d(0, -4px, 0);
+    }
+}
+
+@keyframes logoAppear {
+    from {
+        opacity: 0;
+    }
+  
+    to {
+        opacity: 1;
+        }
+  }
+
+
+@keyframes progressLoading {
+    from {
+        left: -30%;
+    }
+  
+    to {
+        left: 100%;
+    }
+  }
