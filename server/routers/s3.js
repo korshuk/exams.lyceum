@@ -36,7 +36,7 @@ function loadCleanData(appStart) {
     let fileData;
 
     fs.readFile(CLEAN_FILE_NAME, (err, data) => {  
-        if (err) {
+        if (err || data.length === 0) {
            fileData = [];
         } else {
             fileData = JSON.parse(data);
@@ -46,7 +46,10 @@ function loadCleanData(appStart) {
             if (err) {
 
             } else {
-                fileData = JSON.parse(data);
+                if (data.length != 0) {
+                    fileData = JSON.parse(data);
+                }
+                
                 setCleanData(fileData, appStart);
             }
         });        
