@@ -2,6 +2,7 @@ version: "3"
 
 services:
   front:
+    restart: always
     container_name: front
     hostname: front
     build:
@@ -11,6 +12,7 @@ services:
       - PORT=80
       - NODE_ENV=production
   server:
+    restart: always
     container_name: server
     hostname: server
     build:
@@ -23,6 +25,7 @@ services:
       - NODE_ENV=production
       - S3_BUCKET_NAME=lyceumexams   
   front-balancer:
+    restart: always
     container_name: front-balancer
     hostname: front-balancer
     image: nginx:alpine
