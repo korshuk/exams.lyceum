@@ -1,5 +1,5 @@
 node_modules/
-server/db/
+server/db/*
 server/db/clean-data.json
 server/db/auth.json
 server/db/db.json
