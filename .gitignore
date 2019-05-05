@@ -1,1 +1,4 @@
 node_modules/
+server/db/db.json
+server/db/clean-data.json
+server/db/auth.json
