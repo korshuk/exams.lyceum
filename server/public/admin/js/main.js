@@ -180,7 +180,7 @@
                         place: p.place
                     }
                 });
-
+                console.log(examNum, pupils)
                 api
                     .savePupilSeats(examNum, pupils)
                     .then(onPupilsSaved)
