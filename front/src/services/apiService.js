@@ -12,6 +12,9 @@ export default {
     return Vue.axios.get(CONSTANTS.BASE_URL + 'pupils/search/saved', { params: { search } })
   },
   getPupils (params) {
+    if (params.corps.indexOf('_') > -1) {
+      params.corps = params.corps.split('_')[0]
+    }
     return Vue.axios.get(CONSTANTS.BASE_URL + 'pupils/saved', { params: params })
   },
   getDictionary () {
@@ -21,6 +24,10 @@ export default {
     return Vue.axios.get(CONSTANTS.BASE_URL + 'corpses/saved')
   },
   getCorps (corpsAlias) {
+    
+    if (corpsAlias.indexOf('_') > -1) {
+      corpsAlias = corpsAlias.split('_')[0];
+    }
     return Vue.axios.get(CONSTANTS.BASE_URL + 'corpses/saved/' + corpsAlias)
   },
   sendPupilStatus (pupil, status) {

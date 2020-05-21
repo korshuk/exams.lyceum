@@ -36,14 +36,16 @@ const CONSTANTS = {
     '0': 'ok',
     '1': 'неявка',
     '2': 'удален за дело',
-    '3': 'удален по хорошей причине'
+    '3': 'удален по хорошей причине',
+    '4': 'удален за температуру'
   },
 
   EXAM_ICONS: {
     '0': 'ok',
     '1': 'directions_run',
     '2': 'format_align_left',
-    '3': 'local_hospital'
+    '3': 'accessible_forward',
+    '4': 'local_hospital'
   },
 
   SNACKBAR_SUCCESS: 'Статус сохранен',

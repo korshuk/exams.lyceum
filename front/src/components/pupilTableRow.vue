@@ -5,7 +5,7 @@
         </td>
         <td>
             <span v-if="DICTIONARY.audiences[props.item.audience]">
-                {{ DICTIONARY.audiences[props.item.audience] }} 
+                {{ DICTIONARY.audiences[props.item.audience].indexOf('_') > -1 ? DICTIONARY.audiences[props.item.audience].split('_')[1] : DICTIONARY.audiences[props.item.audience] }} 
                 {{ props.item.needBel === true ? ' (бел)' : '' }}
             </span>
             <br/>
@@ -17,7 +17,7 @@
             <span v-if="type === 'search' && DICTIONARY.corpses[props.item.corps]">
                 <br/>
                 <nobr class="grey--text text--darken-2">
-                {{ DICTIONARY.corpses[props.item.corps] }}
+                {{ DICTIONARY.corpses[props.item.corps].indexOf('&') > -1 ?  DICTIONARY.corpses[props.item.corps].split('&')[DICTIONARY.audiences[props.item.audience].split('_')[0]] :  DICTIONARY.corpses[props.item.corps]  }}
                 </nobr> 
             </span>
         </td>

@@ -35,10 +35,10 @@
                     item-value="_id"
                   >
                     <template slot="selection" slot-scope="data">
-                      {{ data.item.name}}{{data.item.bel === true ? ' (бел)' : ''}}{{data.item.count ? ' - ' + data.item.count + 'ч.' : ''}}
+                      {{ data.item.name.indexOf('_') > -1 ? data.item.name.split('_')[1] : data.item.name}}{{data.item.bel === true ? ' (бел)' : ''}}{{data.item.count ? ' - ' + data.item.count + 'ч.' : ''}}
                     </template>
                     <template slot="item" slot-scope="data">
-                      {{ data.item.name}}{{data.item.bel === true ? ' (бел)' : ''}}{{data.item.count ? ' - ' + data.item.count + 'ч.' : ''}}
+                      {{ data.item.name.indexOf('_') > -1 ? data.item.name.split('_')[1] : data.item.name}}{{data.item.bel === true ? ' (бел)' : ''}}{{data.item.count ? ' - ' + data.item.count + 'ч.' : ''}}
                     </template>
                   </v-select>
                 </v-flex>
@@ -198,8 +198,8 @@
       },
 
       fetchCorps () {
-        const corpsAlias = this.$route.params.corpsAlias
-
+        let corpsAlias = this.$route.params.corpsAlias
+        
         apiService
           .getCorps(corpsAlias)
           .then(this.onCorpsSuccess)
@@ -207,7 +207,20 @@
       },
 
       onPupilsSuccess (response) {
-        this.pupils = response.data
+        let pupils = [];
+        let audienceArray = [];
+
+        for(let i = 0; i < this.corps.places.length; i++) {
+          for(let j = 1; j < this.corps.places[i].audience.length; j++) {
+            audienceArray.push(this.corps.places[i].audience[j]._id)
+          }
+        }
+        for(let i = 0; i < response.data.length; i++) {
+          if (audienceArray.indexOf(response.data[i].audience ) > -1) {
+            pupils.push(response.data[i])
+          }
+        }
+        this.pupils = pupils;
       },
 
       onCorpsSuccess (response) {
@@ -216,8 +229,16 @@
         let length = response.data.places.length
         let selectedPlaceIndex = 0
         let allAudience = []
-
+        let corpsAlias = this.$route.params.corpsAlias;
         this.corps = Object.assign({}, response.data)
+        let isMultipleCorps = corpsAlias.indexOf('_') > -1 ;
+        
+        if ( isMultipleCorps ) {
+          let index = corpsAlias.split('_')[1]
+          this.corps.name = this.corps.name.split('&')[index];
+          this.corps.alias = this.corps.alias + '_' + index;
+          this.corps.index = index;
+        }
 
         if (length > 1) {
           this.corps.places.unshift(JSON.parse(JSON.stringify(CONSTANTS.NONE_PLACE)))
@@ -229,10 +250,21 @@
           if (this.corps.places[i]._id === routPlace) {
             selectedPlaceIndex = i
           }
+          if (isMultipleCorps) {
+            let filteredAudiences = [];
+            for(let j = 0; j < this.corps.places[i].audience.length; j++) {
+              if (this.corps.places[i].audience[j].name.split('_')[0] == this.corps.index) {
+                filteredAudiences.push(this.corps.places[i].audience[j])
+              }
+            }
+            this.corps.places[i].audience = filteredAudiences
+          }
 
           allAudience = allAudience.concat(this.corps.places[i].audience)
 
           this.corps.places[i].audience.unshift(JSON.parse(JSON.stringify(CONSTANTS.NONE_AUDIENCE)))
+          
+          
         }
 
         if (length > 1) {

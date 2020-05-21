@@ -52,7 +52,7 @@
 
       <v-toolbar-side-icon v-if="isLoggedIn" @click.stop="drawer = !drawer" class="white--text"></v-toolbar-side-icon>
 
-      <v-toolbar-title>{{DICTIONARY.corpses && DICTIONARY.corpses[title]}}</v-toolbar-title>
+      <v-toolbar-title>{{DICTIONARY.corpses && (title.indexOf('_') > -1 ? DICTIONARY.corpses[ title.split('_')[0] ].split('&')[ title.split('_')[1] ] : DICTIONARY.corpses[title] )}}</v-toolbar-title>
       <v-spacer></v-spacer>
       
       <v-btn icon ripple v-if="isTable" href="#/search" class="mx-3 white--text">
@@ -185,7 +185,22 @@ export default {
     },
 
     onSuccess (response) {
-      this.corpses = response.data
+      this.corpses = [];
+      for( let i = 0; i < response.data.length; i++) {
+        if (response.data[i].name.indexOf('&') > -1) {
+          let corpsNames = response.data[i].name.split('&');
+          for (let j = 0; j < corpsNames.length; j++) {
+            let corps = JSON.parse(JSON.stringify(response.data[i]));
+            corps.name = corpsNames[j];
+            corps.alias = corps.alias + '_' + j;
+            this.corpses.push(corps)
+          }
+
+        } else {
+          this.corpses.push(response.data[i])
+        }
+
+      }
       this.DICTIONARY = dictionaryService.getters.DICTIONARY()
       this.$router.push('/')
       setTimeout(function () {
