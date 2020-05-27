@@ -36,42 +36,72 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                        <% corps.forEach(function(corp) { %>
-                            <table class="table table-striped table-bordered">
-                                    <thead>
-                                            <tr>
-                                                    <th colspan="3" class="text-center">
-                                                        <b><%= corp.name %></b>
-                                                    </th>
-                                                    <th class="text-right">
-                                                            <a href="<%= '/api/corpses/print/' + corp.alias + '.html' %>" target="_blank">Печать</a>
-                                                    </th>
-                                                </tr>
-                                    </thead>
-                                    <tbody>
-                                            
-                                            <% corp.places.forEach(function(place) { %>
-                                                <tr class="table-dark">
-                                                    <th style="width: 30%"></th>
-                                                        <th><%= place.code %></th>
-                                                        <th><%= place.count %></th>
-                                                        <th><%= place.max %> - max</th>
-                                                </tr>
-                                                <% place.audience.forEach(function(audience) { %>
-                                                    <tr class="<%= audience.count > audience.max ? 'table-danger' : ''%>">
-                                                            <td></td>
-                                                            <td><%= audience.name %><%= audience.bel === true ? ' (бел)' : ''%></td>
-                                                            <td><%= audience.count %></td>
-                                                            <td><%= audience.max %></td>
-                                                            
+                        <% corps.forEach(function(corpus) { 
+                            var subcorpses = [corpus]
+                            if (corpus.name.indexOf('&') > -1) {
+                                var names = corpus.name.split('&');
+                                subcorpses = [];
+                                names.forEach(function(name, index) {
+                                    var newcorps = JSON.parse(JSON.stringify(corpus))
+                                    newcorps.name = name;
+                                    newcorps.index = index;
+                                    subcorpses.push(newcorps);
+                                })
+                                
+                            }
+                            subcorpses.forEach(function(corp) {
+
+                            %>  
+                                <table class="table table-striped table-bordered">
+                                        <thead>
+                                                <tr>
+                                                        <th colspan="3" class="text-center">
+                                                            <b><%= corp.name %></b>
+                                                        </th>
+                                                        <th class="text-right">
+                                                            <%
+                                                                var printUrl = '/api/corpses/print/' + corp.alias + '.html'
+                                                                if (+corp.index > -1) {
+                                                                    printUrl = '/api/corpses/print/' + corp.alias + '.html' + '?index=' + corp.index
+                                                                }
+                                                            %>
+                                                                <a href="<%= printUrl %>" target="_blank">Печать</a>
+                                                        </th>
                                                     </tr>
-                                                    
-                                                <% }); %>
-                                            <% }); %>     
-                                </tbody>
-                            </table>
-                            <br>
-                        <% }); %>        
+                                        </thead>
+                                        <tbody>
+                                                
+                                                <% corp.places.forEach(function(place) { %>
+                                                    <tr class="table-dark">
+                                                        <th style="width: 30%"></th>
+                                                            <th><%= place.code %></th>
+                                                            <th><%= place.count %></th>
+                                                            <th><%= place.max %> - max</th>
+                                                    </tr>
+                                                    <% place.audience.forEach(function(audience) { 
+                                                        if (+corp.index > -1) {
+                                                            var audienceIndex = audience.name.split('_')[0];
+                                                            if ('' + audienceIndex !== '' + corp.index) {
+                                                                return
+                                                            }
+                                                        }
+
+                                                        %>
+                                                        <tr class="<%= audience.count > audience.max ? 'table-danger' : ''%>">
+                                                                <td></td>
+                                                                <td><%= audience.name %><%= audience.bel === true ? ' (бел)' : ''%></td>
+                                                                <td><%= audience.count %></td>
+                                                                <td><%= audience.max %></td>
+                                                                
+                                                        </tr>
+                                                        
+                                                    <% }); %>
+                                                <% }); %>     
+                                    </tbody>
+                                </table>
+                                <br>
+                        <% });
+                        }); %>        
                 </div>
             </div>
         </div>

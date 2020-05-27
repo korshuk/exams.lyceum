@@ -144,12 +144,24 @@ corpsesRouter.route('/print/:id.html')
 
         for (i; i < DataService.db.corpsesS.length; i++) {
             if (DataService.db.corpsesS[i].alias === id) {
-
+                const dictionary = DataService.generateDictionary();
                 let responsePupils = JSON.parse(JSON.stringify(DataService.db.pupilsS));
 
                 responsePupils = responsePupils
                     .filter(function(pupil){
-                        return pupil.corps === id;
+                        if (+req.query.index > -1) {
+                            var isInCorps = pupil.corps === id;
+                            
+                            var audienceName = dictionary.audiences[ pupil.audience ];
+                            var isInSubCorps = true;
+                            if (audienceName) {
+                                isInSubCorps = +(audienceName.split('_')[0]) === +req.query.index
+                            }
+                            return isInCorps && isInSubCorps
+                        } else {
+                            return pupil.corps === id;
+                        }
+                        
                     })
                     .sort(function(a,b){
                         if (a.audience < b.audience) {
@@ -162,6 +174,7 @@ corpsesRouter.route('/print/:id.html')
                     })
 
                 res.render('pages/corpsPrint', {
+                    corpsIndex: req.query.index,
                     pupils: responsePupils,
                     corps: DataService.db.corpsesS[i],
                     dictionary: DataService.generateDictionary()
@@ -260,6 +273,9 @@ function saveCurrentSeats(req, res) {
     var timestemp = req.query.time;
     DataService.db.timestemp = timestemp;
     DataService.db.pupilsS = JSON.parse(JSON.stringify(DataService.db.pupilsG));
+    for (var i = 0; i < DataService.db.pupilsS.length; i++) {
+        DataService.db.pupilsS[i].examStatus = undefined;
+    }
     DataService.db.corpsesS = JSON.parse(JSON.stringify(DataService.db.corpsesG));
     S3Service.updateDBFile(function (err, data) {
         sendResp(res, {

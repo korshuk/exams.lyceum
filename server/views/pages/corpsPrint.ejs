@@ -5,6 +5,11 @@
 </head>
 
 <body>
+    <% var corpsName = corps.name
+        if (corps.name.indexOf('&') > -1 && +corpsIndex > -1) {
+            corpsName = corps.name.split('&')[corpsIndex]
+        }
+    %>
             <% corps.places.forEach(function(place) { %>
                 <%  var counter = 1; 
                     var pupuilsArray = pupils
@@ -19,7 +24,8 @@
                     <thead>
                         <tr>
                             <th class="text-center" colspan="5">
-                                <%= dictionary.profiles[pupuilsArray[0].profile] %> - <%= place.code %>
+                                
+                                <%= corpsName %> / <%= dictionary.profiles[pupuilsArray[0].profile] %> - <%= place.code %>
                             </th>
                         </tr>
                         <tr>
@@ -60,12 +66,14 @@
                         return a.firstName == b.firstName ? 0 : +(a.firstName > b.firstName) || -1;
                     });
                     
+                    if (pups.length > 0) {
                     %>
+
                     <table class="table table-striped table-small">
                         <thead>
                             <tr>
                                 <th class="text-center" colspan="6">
-                                    <%= audience.name %>
+                                    <%= corpsName %> / <%= audience.name %>
                                 </th>
                             </tr>
                             <tr>
@@ -91,7 +99,8 @@
                         </tbody>   
                     </table>
                     <div class="page-break"></div>
-                <% }); %>   
+                <%  } 
+                }); %>   
            <% }); %>   
 
 </body>
