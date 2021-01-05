@@ -11,7 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "debounce": "^1.1.0",
     "img-vuer": "^0.9.22",
     "less": "^3.7.1",
